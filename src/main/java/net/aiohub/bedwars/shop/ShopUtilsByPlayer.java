@@ -165,7 +165,7 @@ public class ShopUtilsByPlayer {
         items.setContents(items2);
         items.setItem(10, new ItemBuilder(Material.WOOD_PICKAXE, 1).setName("§fHolzspitzhacke").setLore(Arrays.asList("§620 AIOs", "20")).addEnchant(Enchantment.DURABILITY,1).addEnchant(Enchantment.DIG_SPEED,1).toItemStack());
         items.setItem(11, new ItemBuilder(Material.STONE_PICKAXE, 1).addEnchant(Enchantment.DURABILITY,1).addEnchant(Enchantment.DIG_SPEED,1).setName("§fSteinspitzhacke").setLore(Arrays.asList("§650 AIOs", "50")).toItemStack());
-        items.setItem(12, new ItemBuilder(Material.IRON_PICKAXE, 1).addEnchant(Enchantment.DURABILITY,3).addEnchant(Enchantment.DIG_SPEED,1).setName("§fGoldspitzhacke").setLore(Arrays.asList("§6125 AIOs", "125")).toItemStack());
+        items.setItem(12, new ItemBuilder(Material.IRON_PICKAXE, 1).addEnchant(Enchantment.DURABILITY,3).addEnchant(Enchantment.DIG_SPEED,1).setName("§fEisenspitzhacke").setLore(Arrays.asList("§6125 AIOs", "125")).toItemStack());
         items.setItem(14, new ItemBuilder(Material.FISHING_ROD, 1).setName("§fAngel").setLore(Arrays.asList("§6250 AIOs", "250")).toItemStack());
         items.setItem(15, new ItemBuilder(Material.FLINT_AND_STEEL, 1).setName("§fFeuerzeug").setLore(Arrays.asList("§6250 AIOs", "250")).toItemStack());
         IntStream.range(9,18).forEach(i -> {

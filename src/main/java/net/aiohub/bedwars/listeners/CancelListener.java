@@ -102,7 +102,9 @@ public class CancelListener implements Listener{
 				return;
 			}
             if(e.getMessage().startsWith("@all")) {
+
 				if(e.getMessage().equalsIgnoreCase("@all")) {
+                    e.setCancelled(true);
 					return;
 				}
 				String message = e.getMessage().replaceFirst("@all", "");
@@ -119,7 +121,8 @@ public class CancelListener implements Listener{
                 return;
             }else if(e.getMessage().startsWith("@a")) {
 				if(e.getMessage().equalsIgnoreCase("@a")) {
-					return;
+                    e.setCancelled(true);
+                    return;
 				}
                 String message = e.getMessage().replaceFirst("@a", "");
                 if(message == null || message == "") {
@@ -135,6 +138,7 @@ public class CancelListener implements Listener{
                 return;
             }else if(e.getMessage().startsWith("@")) {
 				if(e.getMessage().equalsIgnoreCase("@")) {
+                    e.setCancelled(true);
 					return;
 				}
                 String message = e.getMessage().replaceFirst("@", "");
