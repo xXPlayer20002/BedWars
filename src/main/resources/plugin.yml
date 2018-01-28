@@ -1,0 +1,10 @@
+name: BedWars
+version: 2.1
+author: devcode
+main: net.aiohub.bedwars.BedWars
+depend: [CloudNetAPI]
+commands:
+  getlocation:
+  start:
+  stats:
+  forcemap:
