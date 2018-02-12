@@ -87,12 +87,7 @@ public class JoinListener implements Listener {
         player.getActivePotionEffects().forEach(potionEffect ->
                 player.removePotionEffect(potionEffect.getType()));
         player.getInventory().setItem(0, new ItemBuilder(Material.BED).setName("§aTeamauswahl").toItemStack());
-        player.getInventory().setItem(4, new ItemBuilder(Material.NETHER_STAR).setName("§aVoting").toItemStack());
-
-        if (Bukkit.getOnlinePlayers().size() == BedWars.getInstance().getMinPlayers() && BedWars.getInstance().getCountdownHandler().isStarted() == false) {
-            BedWars.getInstance().getCountdownHandler().setStarted(true);
-            BedWars.getInstance().getCountdownHandler().onLobby();
-        }
+        player.getInventory().setItem(8, new ItemBuilder(Material.NETHER_STAR).setName("§aVoting").toItemStack());
 
     }
 

@@ -28,11 +28,28 @@ public class CountdownHandler {
     private int lobbyCountdown = 61;
     private boolean started = false;
 
+
+
     public void onLobby() {
         new BukkitRunnable() {
 
             @Override
             public void run() {
+                if (Bukkit.getOnlinePlayers().size() < BedWars.getInstance().getMinPlayers()) {
+                    Bukkit.getOnlinePlayers().forEach(all -> {
+                        all.setExp(0);
+                        all.setLevel(0);
+                        int playersLeft = BedWars.getInstance().getMinPlayers()-Bukkit.getOnlinePlayers().size();
+                        if(playersLeft > 1)
+                        TitleApi.endTitel(all, "§7Es fehlen noch §b" + playersLeft + " §7Spieler.");
+                        else
+                            TitleApi.endTitel(all, "§7Es fehlt noch §b" + playersLeft + " §7Spieler.");
+                    });
+                    started = false;
+                    return;
+                }else{
+                    setStarted(true);
+                }
                 if (lobbyCountdown <= lobbyCountdown) {
                     lobbyCountdown--;
                     Bukkit.getOnlinePlayers().forEach(player -> {
@@ -67,18 +84,7 @@ public class CountdownHandler {
                         });
                     }
 
-                    if (Bukkit.getOnlinePlayers().size() < BedWars.getInstance().getMinPlayers()) {
-                        Bukkit.getOnlinePlayers().forEach(all -> {
-                            all.setExp(0);
-                            all.setLevel(0);
-                            all.sendMessage("§cEs sind zu wenig Spieler online.");
 
-                        });
-                        started = false;
-                        lobbyCountdown = 61;
-                        cancel();
-                        return;
-                    }
                 }
                 if (lobbyCountdown == 0) {
                     Bukkit.getOnlinePlayers().forEach(player -> {
@@ -101,6 +107,9 @@ public class CountdownHandler {
                             BedWars.getInstance().getServerUtils().getTeamsLeft().add(team);
                         }
                     });
+                    BedWars.getInstance().getServerUtils().setSpawner();
+                    BedWars.getInstance().getServerUtils().setBed();
+                    BedWars.getInstance().getServerUtils().setVillager();
                     BedWars.getInstance().getGoldVoting().handleVoting();
                     BedWars.getInstance().getTeleportUtils().setLocations();
                     BedWars.getInstance().getTeleportUtils().teleportTeams();
@@ -135,12 +144,14 @@ public class CountdownHandler {
                     ingame--;
                     if (ingame == 5999) {
                         Bukkit.getWorlds().forEach(world -> {
+
                             world.getEntities().forEach(entity -> {
                                 if (!(entity instanceof Player)) {
                                     entity.remove();
                                 }
                             });
                         });
+
                         BedWars.getInstance().getServerUtils().setVillager();
                     }
                 }

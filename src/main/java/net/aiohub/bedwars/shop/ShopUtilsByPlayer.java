@@ -19,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ import java.util.stream.IntStream;
 
 import lombok.Getter;
 
-public class ShopUtilsByPlayer {
+public class ShopUtilsByPlayer{
 
     private HashMap<ShopCategory, ItemStack[]> shopItems = new HashMap<>();
     private HashMap<Player, ShopCategory> playerCategory = new HashMap<>();
@@ -72,11 +73,11 @@ public class ShopUtilsByPlayer {
         ItemStack[] items2 = getShopItems(ShopCategory.STANDART);
         Inventory items = Bukkit.createInventory(null, 18, "§bBedWars Shop");
         items.setContents(items2);
-        items.setItem(11, new ItemBuilder(Material.STAINED_CLAY, 2, BedWars.getInstance().getPlayerUtils().getGetTeamByPlayer(player).getColorData()).setName("§fSteine").setLore(Arrays.asList("§63 AIOs", "3")).toItemStack());
-        items.setItem(12, new ItemBuilder(Material.GLASS, 1).setName("§fGlas").setLore(Arrays.asList("§65 AIOs", "5")).toItemStack());
-        items.setItem(13, new ItemBuilder(Material.GLOWSTONE, 1).setName("§fGlowstone").setLore(Arrays.asList("§67 AIOs", "7")).toItemStack());
-        items.setItem(14, new ItemBuilder(Material.ENDER_STONE, 1).setName("§fEndstein").setLore(Arrays.asList("§610 AIOs", "10")).toItemStack());
-        items.setItem(16, new ItemBuilder(Material.IRON_BLOCK, 1).setName("§fEisenblock").setLore(Arrays.asList("§f30 AIOs", "30")).toItemStack());
+        items.setItem(11, new ItemBuilder(Material.STAINED_CLAY, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Bloecke"), BedWars.getInstance().getPlayerUtils().getGetTeamByPlayer(player).getColorData()).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Bloecke")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Bloecke")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Amount.Bloecke")+"")).toItemStack());
+        items.setItem(12, new ItemBuilder(Material.GLASS, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Glas")).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Glas")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Glas")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Glas")+"")).toItemStack());
+        items.setItem(13, new ItemBuilder(Material.GLOWSTONE, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Glowstone")).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Glowstone")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Glowstone")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Glowstone")+"")).toItemStack());
+        items.setItem(14, new ItemBuilder(Material.ENDER_STONE, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Endstein")).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Endstein")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Endstein")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Endstein")+"")).toItemStack());
+        items.setItem(16, new ItemBuilder(Material.IRON_BLOCK, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Eisenblock")).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Eisenblock")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Eisenblock")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Eisenblock")+"")).toItemStack());
         IntStream.range(9,18).forEach(i -> {
             ItemStack itemStack = items.getItem(i);
             if(itemStack != null) {
@@ -97,7 +98,7 @@ public class ShopUtilsByPlayer {
         Inventory items = Bukkit.createInventory(null, 18, "§bBedWars Shop");
         items.setContents(items2);
         {
-            ItemStack stack = new ItemBuilder(Material.LEATHER_HELMET, 1).addUnsafeEnchantment(Enchantment.DURABILITY, 1).addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).setName("§fHelm").setLore(Arrays.asList("§65 AIOs", "5")).toItemStack();
+            ItemStack stack = new ItemBuilder(Material.LEATHER_HELMET, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Helm")).addUnsafeEnchantment(Enchantment.DURABILITY, 1).addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Helm")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Helm")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Helm")+"")).toItemStack();
             LeatherArmorMeta meta = (LeatherArmorMeta) stack.getItemMeta();
             if (meta.getColor() != null) {
                 this.setArmorColor(stack, BedWars.getInstance()
@@ -108,7 +109,7 @@ public class ShopUtilsByPlayer {
         }
 
         {
-            ItemStack stack = new ItemBuilder(Material.LEATHER_CHESTPLATE, 1).addUnsafeEnchantment(Enchantment.DURABILITY, 1).addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).setName("§fBrustplatte").setLore(Arrays.asList("§67 AIOs", "7")).toItemStack();
+            ItemStack stack = new ItemBuilder(Material.LEATHER_CHESTPLATE, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.BrustplatteLeder")).addUnsafeEnchantment(Enchantment.DURABILITY, 1).addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.BrustplatteLeder")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Price.BrustplatteLeder")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.BrustplatteLeder")+"")).toItemStack();
             LeatherArmorMeta meta = (LeatherArmorMeta) stack.getItemMeta();
             if (meta.getColor() != null) {
                 this.setArmorColor(stack, BedWars.getInstance()
@@ -119,7 +120,7 @@ public class ShopUtilsByPlayer {
         }
 
         {
-            ItemStack stack = new ItemBuilder(Material.LEATHER_LEGGINGS, 1).addUnsafeEnchantment(Enchantment.DURABILITY, 1).addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).setName("§fHose").setLore(Arrays.asList("§66 AIOs", "6")).toItemStack();
+            ItemStack stack = new ItemBuilder(Material.LEATHER_LEGGINGS, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Hose")).addUnsafeEnchantment(Enchantment.DURABILITY, 1).addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Hose")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Hose")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Hose")+"")).toItemStack();
             LeatherArmorMeta meta = (LeatherArmorMeta) stack.getItemMeta();
             if (meta.getColor() != null) {
                 this.setArmorColor(stack, BedWars.getInstance()
@@ -129,7 +130,7 @@ public class ShopUtilsByPlayer {
             items.setItem(11, stack);
         }
         {
-            ItemStack stack = new ItemBuilder(Material.LEATHER_BOOTS, 1).addUnsafeEnchantment(Enchantment.DURABILITY, 1).addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).setName("§fStiefel").setLore(Arrays.asList("§65 AIOs", "5")).toItemStack();
+            ItemStack stack = new ItemBuilder(Material.LEATHER_BOOTS, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Schuhe")).addUnsafeEnchantment(Enchantment.DURABILITY, 1).addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Schuhe")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Schuhe")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Schuhe")+"")).toItemStack();
             LeatherArmorMeta meta = (LeatherArmorMeta) stack.getItemMeta();
             if (meta.getColor() != null) {
                 this.setArmorColor(stack, BedWars.getInstance()
@@ -141,9 +142,9 @@ public class ShopUtilsByPlayer {
 
 
 
-        items.setItem(15, new ItemBuilder(Material.CHAINMAIL_CHESTPLATE, 1).addUnsafeEnchantment(Enchantment.DURABILITY, 1).addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).setName("§fBrustplatte I").setLore(Arrays.asList("§650 AIOs", "50")).toItemStack());
-        items.setItem(16, new ItemBuilder(Material.CHAINMAIL_CHESTPLATE, 1).addUnsafeEnchantment(Enchantment.DURABILITY, 1).addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).setName("§fBrustplatte II").setLore(Arrays.asList("§6125 AIOs", "125")).toItemStack());
-        items.setItem(17, new ItemBuilder(Material.CHAINMAIL_CHESTPLATE, 1).addUnsafeEnchantment(Enchantment.DURABILITY, 1).addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3).setName("§fBrustplatte III").setLore(Arrays.asList("§6250 AIOs", "250")).toItemStack());
+        items.setItem(15, new ItemBuilder(Material.CHAINMAIL_CHESTPLATE, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.BrustplatteEisenI")).addUnsafeEnchantment(Enchantment.DURABILITY, 1).addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.BrustplatteEisenI")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.BrustplatteEisenI")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.BrustplatteEisenI")+"")).toItemStack());
+        items.setItem(16, new ItemBuilder(Material.CHAINMAIL_CHESTPLATE, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.BrustplatteEisenII")).addUnsafeEnchantment(Enchantment.DURABILITY, 1).addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.BrustplatteEisenII")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.BrustplatteEisenII")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.BrustplatteEisenII")+"")).toItemStack());
+        items.setItem(17, new ItemBuilder(Material.CHAINMAIL_CHESTPLATE, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.BrustplatteEisenIII")).addUnsafeEnchantment(Enchantment.DURABILITY, 1).addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.BrustplatteEisenIII")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.BrustplatteEisenIII")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.BrustplatteEisenIII")+"")).toItemStack());
         IntStream.range(9,18).forEach(i -> {
             ItemStack itemStack = items.getItem(i);
             if(itemStack != null) {
@@ -163,11 +164,11 @@ public class ShopUtilsByPlayer {
         ItemStack[] items2 = getShopItems(ShopCategory.STANDART);
         Inventory items = Bukkit.createInventory(null, 18, "§bBedWars Shop");
         items.setContents(items2);
-        items.setItem(10, new ItemBuilder(Material.WOOD_PICKAXE, 1).setName("§fHolzspitzhacke").setLore(Arrays.asList("§620 AIOs", "20")).addEnchant(Enchantment.DURABILITY,1).addEnchant(Enchantment.DIG_SPEED,1).toItemStack());
-        items.setItem(11, new ItemBuilder(Material.STONE_PICKAXE, 1).addEnchant(Enchantment.DURABILITY,1).addEnchant(Enchantment.DIG_SPEED,1).setName("§fSteinspitzhacke").setLore(Arrays.asList("§650 AIOs", "50")).toItemStack());
-        items.setItem(12, new ItemBuilder(Material.IRON_PICKAXE, 1).addEnchant(Enchantment.DURABILITY,3).addEnchant(Enchantment.DIG_SPEED,1).setName("§fEisenspitzhacke").setLore(Arrays.asList("§6125 AIOs", "125")).toItemStack());
-        items.setItem(14, new ItemBuilder(Material.FISHING_ROD, 1).setName("§fAngel").setLore(Arrays.asList("§6250 AIOs", "250")).toItemStack());
-        items.setItem(15, new ItemBuilder(Material.FLINT_AND_STEEL, 1).setName("§fFeuerzeug").setLore(Arrays.asList("§6250 AIOs", "250")).toItemStack());
+        items.setItem(10, new ItemBuilder(Material.WOOD_PICKAXE, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Holzspitzhacke")).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Holzspitzhacke")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Holzspitzhacke")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Holzspitzhacke")+"")).addEnchant(Enchantment.DURABILITY,1).addEnchant(Enchantment.DIG_SPEED,1).toItemStack());
+        items.setItem(11, new ItemBuilder(Material.STONE_PICKAXE, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Steinspitzhacke")).addEnchant(Enchantment.DURABILITY,1).addEnchant(Enchantment.DIG_SPEED,1).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Steinspitzhacke")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Steinspitzhacke")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Steinspitzhacke")+"")).toItemStack());
+        items.setItem(12, new ItemBuilder(Material.IRON_PICKAXE, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Eisenspitzhacke")).addEnchant(Enchantment.DURABILITY,3).addEnchant(Enchantment.DIG_SPEED,1).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Eisenspitzhacke")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Eisenspitzhacke")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Eisenspitzhacke")+"")).toItemStack());
+        items.setItem(14, new ItemBuilder(Material.FISHING_ROD, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Angel")).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Angel")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Angel")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Angel")+"")).toItemStack());
+        items.setItem(15, new ItemBuilder(Material.FLINT_AND_STEEL, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Feuerzeug")).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Feuerzeug")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Feuerzeug")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Feuerzeug")+"")).toItemStack());
         IntStream.range(9,18).forEach(i -> {
             ItemStack itemStack = items.getItem(i);
             if(itemStack != null) {
@@ -187,10 +188,10 @@ public class ShopUtilsByPlayer {
         ItemStack[] items2 = getShopItems(ShopCategory.STANDART);
         Inventory items = Bukkit.createInventory(null, 18, "§bBedWars Shop");
         items.setContents(items2);
-        items.setItem(11, new ItemBuilder(Material.STICK, 1).addUnsafeEnchantment(Enchantment.KNOCKBACK,1).setName("§fKnockbackstick").setLore(Arrays.asList("§630 AIOs", "30")).toItemStack());
-        items.setItem(13, new ItemBuilder(Material.GOLD_SWORD, 1).addUnsafeEnchantment(Enchantment.DAMAGE_ALL,1).addUnsafeEnchantment(Enchantment.DURABILITY,1).setName("§fGoldschwert I").setLore(Arrays.asList("§650 AIOs", "1")).toItemStack());
-        items.setItem(14, new ItemBuilder(Material.GOLD_SWORD, 1).addUnsafeEnchantment(Enchantment.DURABILITY,1).addUnsafeEnchantment(Enchantment.DAMAGE_ALL,2).setName("§fGoldschwert II").setLore(Arrays.asList("§6125 AIOs", "3")).toItemStack());
-        items.setItem(15, new ItemBuilder(Material.IRON_SWORD, 1).addUnsafeEnchantment(Enchantment.DURABILITY,1).addUnsafeEnchantment(Enchantment.KNOCKBACK, 1).addUnsafeEnchantment(Enchantment.DAMAGE_ALL,2).setName("§fEisenschwert").setLore(Arrays.asList("§6400 AIOs", "400")).toItemStack());
+        items.setItem(11, new ItemBuilder(Material.STICK, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Stick")).addUnsafeEnchantment(Enchantment.KNOCKBACK,1).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Stick")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Stick")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Stick")+"")).toItemStack());
+        items.setItem(13, new ItemBuilder(Material.GOLD_SWORD, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.GoldschwertI")).addUnsafeEnchantment(Enchantment.DAMAGE_ALL,1).addUnsafeEnchantment(Enchantment.DURABILITY,1).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.GoldschwertI")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.GoldschwertI")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.GoldschwertI")+"")).toItemStack());
+        items.setItem(14, new ItemBuilder(Material.GOLD_SWORD, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.GoldschwertII")).addUnsafeEnchantment(Enchantment.DURABILITY,1).addUnsafeEnchantment(Enchantment.DAMAGE_ALL,2).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.GoldschwertII")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.GoldschwertII")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.GoldschwertII")+"")).toItemStack());
+        items.setItem(15, new ItemBuilder(Material.IRON_SWORD, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Eisenschwert")).addUnsafeEnchantment(Enchantment.DURABILITY,1).addUnsafeEnchantment(Enchantment.KNOCKBACK, 1).addUnsafeEnchantment(Enchantment.DAMAGE_ALL,2).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Eisenschwert")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Eisenschwert")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Eisenschwert")+"")).toItemStack());
         IntStream.range(9,18).forEach(i -> {
             ItemStack itemStack = items.getItem(i);
             if(itemStack != null) {
@@ -210,10 +211,10 @@ public class ShopUtilsByPlayer {
         ItemStack[] items2 = getShopItems(ShopCategory.STANDART);
         Inventory items = Bukkit.createInventory(null, 18, "§bBedWars Shop");
         items.setContents(items2);
-        items.setItem(10, new ItemBuilder(Material.BOW, 1).setDurability((short) 260).addUnsafeEnchantment(Enchantment.ARROW_INFINITE,1).setName("§fBogen I").setLore(Arrays.asList("§6200 AIOs", "200")).toItemStack());
-        items.setItem(12, new ItemBuilder(Material.BOW, 1).setDurability((short) 260).addUnsafeEnchantment(Enchantment.ARROW_INFINITE,1).addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1).setName("§fBogen II").setLore(Arrays.asList("§6550 AIOs", "550")).toItemStack());
-        items.setItem(14, new ItemBuilder(Material.BOW, 1).setDurability((short) 260).addUnsafeEnchantment(Enchantment.ARROW_INFINITE,1).addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 2).addUnsafeEnchantment(Enchantment.ARROW_KNOCKBACK, 1).setName("§fBogen III").setLore(Arrays.asList("§6800 AIOs", "800")).toItemStack());
-        items.setItem(16, new ItemBuilder(Material.ARROW, 1).setName("§fPfeil").setLore(Arrays.asList("§6115 AIOs", "115")).toItemStack());
+        items.setItem(10, new ItemBuilder(Material.BOW, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.BogenI")).setDurability((short) 260).addUnsafeEnchantment(Enchantment.ARROW_INFINITE,1).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.BogenI")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.BogenI")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.BogenI")+"")).toItemStack());
+        items.setItem(12, new ItemBuilder(Material.BOW, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.BogenII")).setDurability((short) 260).addUnsafeEnchantment(Enchantment.ARROW_INFINITE,1).addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.BogenII")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.BogenII")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.BogenII")+"")).toItemStack());
+        items.setItem(14, new ItemBuilder(Material.BOW, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.BogenIII")).setDurability((short) 260).addUnsafeEnchantment(Enchantment.ARROW_INFINITE,1).addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 2).addUnsafeEnchantment(Enchantment.ARROW_KNOCKBACK, 1).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.BogenIII")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.BogenIII")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.BogenIII")+"")).toItemStack());
+        items.setItem(16, new ItemBuilder(Material.ARROW, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Pfeil")).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Pfeil")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Pfeil")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Pfeil")+"")).toItemStack());
         IntStream.range(9,18).forEach(i -> {
             ItemStack itemStack = items.getItem(i);
             if(itemStack != null) {
@@ -233,11 +234,11 @@ public class ShopUtilsByPlayer {
         ItemStack[] items2 = getShopItems(ShopCategory.STANDART);
         Inventory items = Bukkit.createInventory(null, 18, "§bBedWars Shop");
         items.setContents(items2);
-        items.setItem(11, new ItemBuilder(Material.APPLE, 1).setName("§fApfel").setLore(Arrays.asList("§63 AIOs", "3")).toItemStack());
-        items.setItem(12, new ItemBuilder(Material.COOKED_BEEF, 1).setName("§fSteak").setLore(Arrays.asList("§66 AIOs", "6")).toItemStack());
-        items.setItem(10, new ItemBuilder(Material.COOKIE, 2).setName("§fKeks").setLore(Arrays.asList("§63 AIOs", "3")).toItemStack());
-        items.setItem(15, new ItemBuilder(Material.CAKE, 1).setName("§fKuchen").setLore(Arrays.asList("§620 AIOs", "20")).toItemStack());
-        items.setItem(16, new ItemBuilder(Material.GOLDEN_APPLE, 1).setName("§fGoldapfel").setLore(Arrays.asList("§6175 AIOs", "175")).toItemStack());
+        items.setItem(11, new ItemBuilder(Material.APPLE, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Apfel")).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Apfel")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Apfel")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Apfel")+"")).toItemStack());
+        items.setItem(12, new ItemBuilder(Material.COOKED_BEEF, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Steak")).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Steak")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Steak")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Steak")+"")).toItemStack());
+        items.setItem(10, new ItemBuilder(Material.COOKIE, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Kekse")).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Kekse")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Kekse")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Kekse")+"")).toItemStack());
+        items.setItem(15, new ItemBuilder(Material.CAKE, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Kuchen")).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Kuchen")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Kuchen")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Kuchen")+"")).toItemStack());
+        items.setItem(16, new ItemBuilder(Material.GOLDEN_APPLE, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.GoldApfel")).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.GoldApfel")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.GoldApfel")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.GoldApfel")+"")).toItemStack());
         IntStream.range(9,18).forEach(i -> {
             ItemStack itemStack = items.getItem(i);
             if(itemStack != null) {
@@ -257,8 +258,8 @@ public class ShopUtilsByPlayer {
         ItemStack[] items2 = getShopItems(ShopCategory.STANDART);
         Inventory items = Bukkit.createInventory(null, 18, "§bBedWars Shop");
         items.setContents(items2);
-        items.setItem(11, new ItemBuilder(Material.CHEST, 1).setName("§fKiste").setLore(Arrays.asList("§650 AIOs", "50")).toItemStack());
-        items.setItem(15, new ItemBuilder(Material.ENDER_CHEST, 1).setName("§fTeamchest").setLore(Arrays.asList("§6180 AIOs", "180")).toItemStack());
+        items.setItem(11, new ItemBuilder(Material.CHEST, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Kiste")).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Kiste")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Kiste")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Kiste")+"")).toItemStack());
+        items.setItem(15, new ItemBuilder(Material.ENDER_CHEST, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Teamkiste")).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Teamkiste")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Teamkiste")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Teamkiste")+"")).toItemStack());
 
         IntStream.range(9,18).forEach(i -> {
             ItemStack itemStack = items.getItem(i);
@@ -279,13 +280,13 @@ public class ShopUtilsByPlayer {
         ItemStack[] items2 = getShopItems(ShopCategory.STANDART);
         Inventory items = Bukkit.createInventory(null, 18, "§bBedWars Shop");
         items.setContents(items2);
-        items.setItem(9, new ItemBuilder(Material.LADDER, 1).setName("§fLeiter").setLore(Arrays.asList("§63 AIOs", "3")).toItemStack());
-        items.setItem(11, new ItemBuilder(Material.FIREWORK, 1).setName("§fBaseTeleporter").setLore(Arrays.asList("§6200 AIOs", "200")).toItemStack());
-        items.setItem(12, new ItemBuilder(Material.ARMOR_STAND, 1).setName("§fMobiler Shop").setLore(Arrays.asList("§6475 AIOs", "475")).toItemStack());
-        items.setItem(17, new ItemBuilder(Material.ENDER_PEARL, 1).setName("§fEnderperle").setLore(Arrays.asList("§6750 AIOs", "750")).toItemStack());
-        items.setItem(10, new ItemBuilder(Material.WEB, 1).setName("§fCobweb").setLore(Arrays.asList("§618 AIOs", "18")).toItemStack());
-        items.setItem(15, new ItemBuilder(Material.TNT, 1).setName("§fTNT").setLore(Arrays.asList("§6180 AIOs", "180")).toItemStack());
-        items.setItem(16, new ItemBuilder(Material.BLAZE_ROD, 1).setName("§fRettungsplattform").setLore(Arrays.asList("§6225 AIOs", "225")).toItemStack());
+        items.setItem(9, new ItemBuilder(Material.LADDER, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Leiter")).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Leiter")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Leiter")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Leiter")+"")).toItemStack());
+        items.setItem(11, new ItemBuilder(Material.FIREWORK, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.BaseTeleporter")).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.BaseTeleporter")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.BaseTeleporter")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.BaseTeleporter")+"")).toItemStack());
+        items.setItem(12, new ItemBuilder(Material.ARMOR_STAND, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.MobilerShop")).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.MobilerShop")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.MobilerShop")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.MobilerShop")+"")).toItemStack());
+        items.setItem(17, new ItemBuilder(Material.ENDER_PEARL, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Enderperle")).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Enderperle")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Enderperle")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Enderperle")+"")).toItemStack());
+        items.setItem(10, new ItemBuilder(Material.WEB, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Cobweb")).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Cobweb")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Cobweb")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Cobweb")+"")).toItemStack());
+        items.setItem(15, new ItemBuilder(Material.TNT, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Tnt")).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Tnt")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Tnt")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Tnt")+"")).toItemStack());
+        items.setItem(16, new ItemBuilder(Material.BLAZE_ROD, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Rettungsplattform")).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Rettungsplattform")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Rettungsplattform")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Rettungsplattform")+"")).toItemStack());
 
         IntStream.range(9,18).forEach(i -> {
             ItemStack itemStack = items.getItem(i);
@@ -306,12 +307,12 @@ public class ShopUtilsByPlayer {
         ItemStack[] items2 = getShopItems(ShopCategory.STANDART);
         Inventory items = Bukkit.createInventory(null, 18, "§bBedWars Shop");
         items.setContents(items2);
-        items.setItem(10, new ItemBuilder(Material.POTION, 1, (byte) 5).setName("§fHeilung 1").setLore(Arrays.asList("§645 AIOs", "45")).toItemStack());
-        items.setItem(11, new ItemBuilder(Material.POTION, 1, (byte) 37).setName("§fHeilung 2").setLore(Arrays.asList("§680 AIOs", "80")).toItemStack());
-        items.setItem(12, new ItemBuilder(Material.POTION, 1, (byte) 2).setName("§fGeschwindigkeit").setLore(Arrays.asList("§6150 AIOs", "150")).toItemStack());
-        items.setItem(13, new ItemBuilder(Material.POTION, 1, (byte) 43).setName("§fSprungkraft").setLore(Arrays.asList("§6280 AIOs", "280")).toItemStack());
-        items.setItem(14, new ItemBuilder(Material.POTION, 1, (byte) 14).setName("§fUnsichtbarkeit").setLore(Arrays.asList("§6400 AIOs", "400")).toItemStack());
-        items.setItem(16, new ItemBuilder(Material.POTION, 1, (byte) 9).setName("§fStärke").setLore(Arrays.asList("§6700 AIOs", "700")).toItemStack());
+        items.setItem(10, new ItemBuilder(Material.POTION, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Heilung1"), (byte) 5).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Heilung1")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Heilung1")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Heilung1")+"")).toItemStack());
+        items.setItem(11, new ItemBuilder(Material.POTION, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Heilung2"), (byte) 37).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Heilung2")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Heilung2")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Heilung2")+"")).toItemStack());
+        items.setItem(12, new ItemBuilder(Material.POTION, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Geschwindigkeit"), (byte) 2).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Geschwindigkeit")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Geschwindigkeit")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Geschwindigkeit")+"")).toItemStack());
+        items.setItem(13, new ItemBuilder(Material.POTION, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Sprungkraft"), (byte) 43).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Sprungkraft")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Sprungkraft")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Sprungkraft")+"")).toItemStack());
+        items.setItem(14, new ItemBuilder(Material.POTION, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Unsichtbarkeit"), (byte) 14).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Unsichtbarkeit")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Unsichtbarkeit")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Unsichtbarkeit")+"")).toItemStack());
+        items.setItem(16, new ItemBuilder(Material.POTION, BedWars.getInstance().getShopItemsByConfig().getItemAmountByConfig("Amount.Staerke"), (byte) 9).setName(BedWars.getInstance().getShopItemsByConfig().getItemNameByConfig("Name.Staerke")).setLore(Arrays.asList("§6"+BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Staerke")+" AIOs", BedWars.getInstance().getShopItemsByConfig().getItemPriceByConfig("Price.Staerke")+"")).toItemStack());
         IntStream.range(9,18).forEach(i -> {
             ItemStack itemStack = items.getItem(i);
             if(itemStack != null) {

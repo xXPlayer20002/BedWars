@@ -4,6 +4,8 @@ import net.aiohub.bedwars.BedWars;
 import net.aiohub.bedwars.utils.Status;
 import net.aiohub.bedwars.utils.Team;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 import org.bukkit.Bukkit;
@@ -25,16 +27,24 @@ import org.bukkit.material.Bed;
 
 public class BedListener implements Listener {
 
+
     @EventHandler
     public void onExplode(EntityExplodeEvent e) {
-        e.blockList().forEach(block -> {
-            // TODO Auto-generated method stub
-            if(!CancelListener.placedBlocks.contains(e.getEntity())) {
-                e.setCancelled(true);
-                return;
-            }
+        List<Block> blocks = new ArrayList<>();
+        CancelListener.placedBlocks.forEach(block ->
 
-        });
+
+        e.blockList().forEach(block1 -> {
+            // TODO Auto-generated method stub
+
+                if(block.equals(block1))
+                blocks.add(block1);
+
+
+        }));
+        e.blockList().clear();
+        blocks.forEach(block ->
+        e.blockList().add(block));
     }
 
     @EventHandler

@@ -3,6 +3,7 @@ package net.aiohub.bedwars;
 import de.dytanic.cloudnet.bridge.CloudServer;
 import de.dytanic.cloudnet.lib.server.ServerState;
 
+import net.aiohub.bedwars.commands.ForceMap;
 import net.aiohub.bedwars.commands.GetLocation;
 import net.aiohub.bedwars.commands.Start;
 import net.aiohub.bedwars.commands.Stats;
@@ -17,6 +18,7 @@ import net.aiohub.bedwars.listeners.ShopUseListeners;
 import net.aiohub.bedwars.listeners.TeamSelector;
 import net.aiohub.bedwars.listeners.VotingListeners;
 import net.aiohub.bedwars.net.aiohub.bedwars.countdown.CountdownHandler;
+import net.aiohub.bedwars.shop.ShopItemsByConfig;
 import net.aiohub.bedwars.utils.GameUtils;
 import net.aiohub.bedwars.utils.GoldVoting;
 import net.aiohub.bedwars.utils.MapVoting;
@@ -65,6 +67,8 @@ public class BedWars extends JavaPlugin {
     private FileConfiguration locationsConfig;
     private File gameFile = new File("plugins/BedWars", "game.yml");
     private FileConfiguration gameConfig;
+    private File itemFile = new File("plugins/BedWars", "items.yml");
+    private FileConfiguration itemConfig;
     private GameUtils gameUtils = new GameUtils();
     private GoldVoting goldVoting = new GoldVoting();
     private MapVoting mapVoting = new MapVoting();
@@ -73,6 +77,7 @@ public class BedWars extends JavaPlugin {
     private List<String> maps;
     private StatsAPI statsAPI;
     private Location hologramLocation;
+    private ShopItemsByConfig shopItemsByConfig;
     @Setter
     private boolean isForceMap;
     private static MongoDBConnector mongoDBConnector;
@@ -90,11 +95,15 @@ public class BedWars extends JavaPlugin {
             loadFile("teams.yml");
         if (!gameFile.exists())
             loadFile("game.yml");
+        if (!itemFile.exists())
+            loadFile("items.yml");
 
         locationsConfig = YamlConfiguration.loadConfiguration(locationsFile);
         gameConfig = YamlConfiguration.loadConfiguration(gameFile);
+        itemConfig = YamlConfiguration.loadConfiguration(itemFile);
+        shopItemsByConfig = new ShopItemsByConfig();
         serverUtils.setConfig();
-
+        getThings("items.yml");
         maps = gameConfig.getStringList("Game.Worlds");
         maps.forEach(s -> {
             WorldCreator worldCreator = new WorldCreator(s);
@@ -103,6 +112,8 @@ public class BedWars extends JavaPlugin {
             world.setWeatherDuration(0);
             world.setThunderDuration(0);
             world.setTime(1000);
+            world.setThundering(false);
+            world.setStorm(false);
 
         });
 
@@ -117,7 +128,7 @@ public class BedWars extends JavaPlugin {
         String maxPlayer = gameConfig.getString("Game.MaxPlayers").replace("[", "").replace("]", "");
         String teams = gameConfig.getString("Game.Teams").replace("[", "").replace("]", "");
         this.teams = Integer.valueOf(teams);
-        mapName = gameConfig.getString("Game.Map").replace("[", "").replace("]", "");
+        mapName = gameConfig.getStringList("Game.Map").get(0);
         hologramLocation = serverUtils.getHologramLocation();
 
 
@@ -138,6 +149,7 @@ public class BedWars extends JavaPlugin {
         statsAPI.setDefaultValues(values);
         serverUtils.registerTeams();
         CloudServer.getInstance().setMaxPlayers(Integer.valueOf(maxPlayer));
+        countdownHandler.onLobby();
     }
 
     private void registerListeners() {
@@ -161,7 +173,18 @@ public class BedWars extends JavaPlugin {
         getCommand("getlocation").setExecutor(new GetLocation());
         getCommand("start").setExecutor(new Start());
         getCommand("stats").setExecutor(new Stats());
-        getCommand("forcemap").setExecutor(new Stats());
+        getCommand("forcemap").setExecutor(new ForceMap());
+    }
+    @SneakyThrows
+    public void getThings(String file) {
+        InputStream is = getClass().getResourceAsStream("/" + file);
+        InputStreamReader isr = new InputStreamReader(is);
+        BufferedReader br = new BufferedReader(isr);
+        String line;
+        while ((line = br.readLine()) != null) {
+            System.out.println(line + "\n");
+        }
+
     }
 
     @SneakyThrows
@@ -178,6 +201,7 @@ public class BedWars extends JavaPlugin {
         while ((line = br.readLine()) != null) {
             out.write(line + "\n");
         }
+        System.out.println(line);
         out.flush();
         is.close();
         isr.close();

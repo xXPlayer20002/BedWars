@@ -27,9 +27,12 @@ import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerAchievementAwardedEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.event.world.StructureGrowEvent;
@@ -162,6 +165,21 @@ public class CancelListener implements Listener{
 		e.setFormat("§f<" + p.getName() + "§f> " + e.getMessage());
 		
 	}
+
+	@EventHandler
+	public void onCraft(CraftItemEvent e) {
+		e.setCancelled(true);
+	}
+
+	@EventHandler
+	public void onInteract(PlayerInteractEvent e) {
+		if(e.getClickedBlock() == null) {
+			return;
+		}
+		if(e.getClickedBlock().getType() == Material.ANVIL || e.getClickedBlock().getType() == Material.FURNACE || e.getClickedBlock().getType() == Material.DISPENSER|| e.getClickedBlock().getType() == Material.HOPPER || e.getClickedBlock().getType() == Material.HOPPER_MINECART) {
+			e.setCancelled(true);
+		}
+	}
 	
 	@EventHandler
 	public void onSpawn(CreatureSpawnEvent e) {
@@ -190,8 +208,8 @@ public class CancelListener implements Listener{
 	
 	@EventHandler
 	public void onWeatherChange(WeatherChangeEvent e) {
-		e.getWorld().setThundering(false);
-		e.setCancelled(true);
+       e.setCancelled(true);
+
 	}
 	
 	@EventHandler

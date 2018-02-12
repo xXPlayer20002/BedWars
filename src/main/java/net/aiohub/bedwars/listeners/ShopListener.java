@@ -138,6 +138,11 @@ public class ShopListener implements Listener {
 
             ItemStack newItemStack = e.getCurrentItem().clone();
             ShopItem shopItem = this.getShop.get(player).getItemByShop(newItemStack);
+            if(player.getInventory().firstEmpty() == -1) {
+                player.sendMessage("§cDein Inventar ist voll.");
+                player.playSound(player.getLocation(), Sound.VILLAGER_NO, 1,10);
+                return;
+            }
             if (e.isShiftClick()) {
 
                 int fullAmount = player.getLevel();
@@ -150,8 +155,12 @@ public class ShopListener implements Listener {
                 int newAmount = fullAmount/shopItem.getAmount();
                 fullAmount = newAmount * shopItem.getAmount();
                 newAmount = newAmount * shopItem.getItem().getAmount();
-                if(newAmount > 64 * shopItem.getItem().getAmount()) {
+                player.sendMessage(newAmount +"");
+                if(newAmount > 64) {
                     newAmount = 64;
+                    if(shopItem.getItem().getAmount() >1) {
+                    fullAmount = (newAmount/shopItem.getItem().getAmount())*shopItem.getAmount();
+                    }else
                     fullAmount = newAmount*shopItem.getAmount();
                 }
 

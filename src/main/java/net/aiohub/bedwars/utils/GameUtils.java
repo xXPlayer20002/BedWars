@@ -19,6 +19,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -120,11 +121,11 @@ public class GameUtils {
             @Override
             public void run() {
 
-                getSpawner.get(Spawner.SpawnerType.BRONZE).forEach(spawner ->
+                getSpawner.get(Spawner.SpawnerType.BRONZE).forEach(spawner -> {
 
 
-                        spawner.getLocation().getWorld().dropItem(spawner.getLocation(), new ItemBuilder(Material.CLAY_BRICK, 1).setName("§cBronze").toItemStack()));
-
+                        spawner.getLocation().getWorld().dropItem(spawner.getLocation(), new ItemBuilder(Material.CLAY_BRICK, 1).setName("§cBronze").toItemStack()).setVelocity(new Vector(0, 0, 0));
+                });
 
             }
         }.runTaskTimer(BedWars.getInstance(), 0, 15);
@@ -135,11 +136,11 @@ public class GameUtils {
             @Override
             public void run() {
 
-                getSpawner.get(Spawner.SpawnerType.EISEN).forEach(spawner ->
+                getSpawner.get(Spawner.SpawnerType.EISEN).forEach(spawner -> {
 
 
-                        spawner.getLocation().getWorld().dropItem(spawner.getLocation(), new ItemBuilder(Material.IRON_INGOT).setName("§7Eisen").toItemStack()));
-
+                    spawner.getLocation().getWorld().dropItem(spawner.getLocation(), new ItemBuilder(Material.IRON_INGOT).setName("§7Eisen").toItemStack()).setVelocity(new Vector(0, 0, 0));
+                });
 
             }
         }.runTaskTimer(BedWars.getInstance(), 180, 180);
@@ -150,10 +151,12 @@ public class GameUtils {
             @Override
             public void run() {
 
-                getSpawner.get(Spawner.SpawnerType.GOLD).forEach(spawner ->
+                getSpawner.get(Spawner.SpawnerType.GOLD).forEach(spawner -> {
 
 
-                        spawner.getLocation().getWorld().dropItem(spawner.getLocation(), new ItemBuilder(Material.GOLD_INGOT).setName("§6Gold").toItemStack()));
+                        spawner.getLocation().getWorld().dropItem(spawner.getLocation(), new ItemBuilder(Material.GOLD_INGOT).setName("§6Gold").toItemStack()).setVelocity(new Vector(0, 0, 0));
+
+                });
 
 
             }
@@ -175,6 +178,10 @@ public class GameUtils {
                     cancel();
                     return;
                 }
+                if(player.getItemInHand().getType() != Material.FIREWORK ){
+                    player.sendMessage("§cDer Teleport wurde abgebrochen.");
+                    return;
+                }
                 if (timer == 0 || timer == 2 || timer == 4 || timer == 6) {
 
                     locations.addAll(getCircle(player.getLocation().add(0, timer / 2, 0), 1, 6));
@@ -189,12 +196,16 @@ public class GameUtils {
                 }
 
                 if (timer == 7) {
+                    if(player.getItemInHand().getType() != Material.FIREWORK ){
+                        player.sendMessage("§cDer Teleport wurde abgebrochen.");
+                        return;
+                    }
                     player.teleport(BedWars.getInstance().getPlayerUtils().getGetTeamByPlayer(player).getLoc());
-                    if(stack.getAmount() == 1)
-                    player.getInventory().removeItem(stack);
+                    if(player.getItemInHand().getAmount() == 1)
+                    player.getInventory().removeItem(player.getItemInHand());
                     else {
-                        stack.setAmount(1);
-                        player.getInventory().removeItem(stack);
+                        player.getItemInHand().setAmount(player.getItemInHand().getAmount()-1);
+                        //player.getInventory().removeItem(player.getItemInHand());
                     }
                     isPlayerMoving.remove(player);
                     cancel();

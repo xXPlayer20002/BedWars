@@ -55,14 +55,21 @@ public class ServerUtils {
             new Team(array[0], array[1].replace("&", "§"), Integer.valueOf(array[2]), Byte.valueOf(array[3]));
         });
 
-        setBed();
-        setSpawner();
+       // setBed();
+        //setSpawner();
     }
 
     public void setBed() {
         IntStream.range(0, allTeams.size()).forEach(i ->{
             Team team = allTeams.get(i);
             if (BedWars.getInstance().getLocationsConfig().getString("Bed." + BedWars.getInstance().getMapName() + "." + team.getName()) == null) {
+                Bukkit.broadcastMessage("Null");
+                BedWars.getInstance().getLocationsConfig().set("Bed1." + BedWars.getInstance().getMapName() + "." + team.getName(), "abc");
+                try {
+                    BedWars.getInstance().getLocationsConfig().save(BedWars.getInstance().getLocationsFile());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 return;
             }
             String location = BedWars.getInstance().getLocationsConfig().getString("Bed." + BedWars.getInstance().getMapName()+ "." + team.getName());
@@ -72,6 +79,7 @@ public class ServerUtils {
             double y =Double.valueOf(arrayLocation[2]);
             double z = Double.valueOf(arrayLocation[3]);
             Location loc = new Location(world, x, y, z);
+
             team.setBed(loc);
         });
     }
@@ -79,7 +87,7 @@ public class ServerUtils {
     public void setSpawner() {
 
             if (BedWars.getInstance().getLocationsConfig().getString("Map.BronzeSpawner." + BedWars.getInstance().getMapName()) == null) {
-
+                Bukkit.broadcastMessage("No Locations for Bronze");
                 return;
             }
         IntStream.range(0, BedWars.getInstance().getLocationsConfig().getStringList("Map.BronzeSpawner." + BedWars.getInstance().getMapName()).size()).forEach(i ->{
