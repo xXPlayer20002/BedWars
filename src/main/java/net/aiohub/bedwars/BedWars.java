@@ -11,6 +11,7 @@ import net.aiohub.bedwars.listeners.BedListener;
 import net.aiohub.bedwars.listeners.CancelListener;
 import net.aiohub.bedwars.listeners.DeathListener;
 import net.aiohub.bedwars.listeners.JoinListener;
+import net.aiohub.bedwars.listeners.PaketListeners;
 import net.aiohub.bedwars.listeners.QuitListener;
 import net.aiohub.bedwars.listeners.ShopItemListeners;
 import net.aiohub.bedwars.listeners.ShopListener;
@@ -18,6 +19,7 @@ import net.aiohub.bedwars.listeners.ShopUseListeners;
 import net.aiohub.bedwars.listeners.TeamSelector;
 import net.aiohub.bedwars.listeners.VotingListeners;
 import net.aiohub.bedwars.net.aiohub.bedwars.countdown.CountdownHandler;
+import net.aiohub.bedwars.shop.PaketUtils;
 import net.aiohub.bedwars.shop.ShopItemsByConfig;
 import net.aiohub.bedwars.utils.GameUtils;
 import net.aiohub.bedwars.utils.GoldVoting;
@@ -76,10 +78,12 @@ public class BedWars extends JavaPlugin {
     private CloudServer cloudServer;
     private List<String> maps;
     private StatsAPI statsAPI;
+    private PaketUtils paketUtils;
     private Location hologramLocation;
     private ShopItemsByConfig shopItemsByConfig;
     @Setter
     private boolean isForceMap;
+    @Getter
     private static MongoDBConnector mongoDBConnector;
     @Setter
     private Status status;
@@ -143,6 +147,11 @@ public class BedWars extends JavaPlugin {
         values.add("beds");
         values.add("wins");
         values.add("games");
+        values.add("paket1");
+        values.add("paket2");
+        values.add("paket3");
+        values.add("paket4");
+        values.add("paket5");
         mongoDBConnector = new MongoDBConnector();
         statsAPI = StatsAPI.getInstance();
         statsAPI.setGameMode("bedwars");
@@ -150,6 +159,7 @@ public class BedWars extends JavaPlugin {
         serverUtils.registerTeams();
         CloudServer.getInstance().setMaxPlayers(Integer.valueOf(maxPlayer));
         countdownHandler.onLobby();
+        paketUtils = new PaketUtils();
     }
 
     private void registerListeners() {
@@ -165,7 +175,7 @@ public class BedWars extends JavaPlugin {
         pluginManager.registerEvents(new DeathListener(), this);
         pluginManager.registerEvents(new VotingListeners(), this);
         pluginManager.registerEvents(new ShopUseListeners(), this);
-        //Todo: Nothing
+        pluginManager.registerEvents(new PaketListeners(), this);
     }
 
     private void registerCommands() {

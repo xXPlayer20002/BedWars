@@ -6,6 +6,7 @@ import net.aiohub.bedwars.shop.ShopItem;
 import net.aiohub.bedwars.utils.HoloAPi;
 import net.aiohub.bedwars.utils.ItemBuilder;
 import net.aiohub.bedwars.utils.Status;
+import net.aiohub.databaseapi.AIOPlayer;
 import net.aiohub.statsmodule.stats.StatsAPI;
 
 import org.bukkit.Bukkit;
@@ -87,6 +88,7 @@ public class JoinListener implements Listener {
         player.getActivePotionEffects().forEach(potionEffect ->
                 player.removePotionEffect(potionEffect.getType()));
         player.getInventory().setItem(0, new ItemBuilder(Material.BED).setName("§aTeamauswahl").toItemStack());
+        player.getInventory().setItem(4, new ItemBuilder(Material.WORKBENCH).setName("§aPakete").toItemStack());
         player.getInventory().setItem(8, new ItemBuilder(Material.NETHER_STAR).setName("§aVoting").toItemStack());
 
     }

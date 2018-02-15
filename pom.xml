@@ -52,7 +52,7 @@
         <dependency>
             <groupId>net.aiohub</groupId>
             <artifactId>DatabaseAPI</artifactId>
-            <version>1.7</version>
+            <version>2.2</version>
         </dependency>
         <!--Bukkit API-->
         <dependency>

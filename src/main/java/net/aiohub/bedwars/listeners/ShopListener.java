@@ -1,9 +1,12 @@
 package net.aiohub.bedwars.listeners;
 
 import net.aiohub.bedwars.BedWars;
+import net.aiohub.bedwars.shop.PaketUtils;
+import net.aiohub.bedwars.shop.PaketUtilsPlayer;
 import net.aiohub.bedwars.shop.ShopCategory;
 import net.aiohub.bedwars.shop.ShopItem;
 import net.aiohub.bedwars.shop.ShopUtilsByPlayer;
+import net.aiohub.bedwars.utils.ItemBuilder;
 import net.aiohub.bedwars.utils.Status;
 import net.minecraft.server.v1_8_R3.BlockBeacon;
 
@@ -18,7 +21,9 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ShopListener implements Listener {
 
@@ -120,11 +125,11 @@ public class ShopListener implements Listener {
                 return;
             }
 
-            if (e.getCurrentItem().getItemMeta().getDisplayName().contains("§aKisten")) {
-                if (this.getShop.get(player).getShopByPlayer(player) == ShopCategory.KISTEN) {
+            if (e.getCurrentItem().getItemMeta().getDisplayName().contains("§aPakete")) {
+                if (this.getShop.get(player).getShopByPlayer(player) == ShopCategory.PAKETE) {
                     return;
                 }
-                getShop.get(player).openShop(ShopCategory.KISTEN, player);
+                getShop.get(player).openShop(ShopCategory.PAKETE, player);
                 return;
             }
 
@@ -142,6 +147,48 @@ public class ShopListener implements Listener {
                 player.sendMessage("§cDein Inventar ist voll.");
                 player.playSound(player.getLocation(), Sound.VILLAGER_NO, 1,10);
                 return;
+            }
+            if(e.getCurrentItem().getType() == Material.WORKBENCH) {
+                PaketUtilsPlayer paketUtilsPlayer = PaketListeners.paketUtils.get(player);
+                List list = paketUtilsPlayer.getList((e.getSlot()-9)+1);
+                List<ItemStack> stack = new ArrayList<>();
+                if (!list.isEmpty()) {
+                    Integer preis = 0;
+                    for (int i = 0; i < list.size(); i++) {
+                        if (list.get(i) != null && !list.get(i).toString().contains("List")) {
+                            String array = list.get(i).toString();
+                            String[] array3 = array.split(",");
+                            ItemStack itemStack = new ItemBuilder(new ItemStack(Integer.valueOf(array3[0]), Integer.valueOf(array3[1]), Short.valueOf(array3[2]))).setName(array3[4]).toItemStack();
+                            itemStack = BedWars.getInstance().getPaketUtils().getCostByItem(itemStack).getItem();
+                            itemStack.getItemMeta().setLore(null);
+                            itemStack.setItemMeta(itemStack.getItemMeta());
+                            stack.add(itemStack);
+                            preis = preis + Integer.valueOf(array3[3]);
+                        }
+                    }
+                    int fullAmount = player.getLevel();
+                    if(preis > fullAmount) {
+                        player.sendMessage("§cDu hast nicht genug AIOs");
+                        player.playSound(player.getLocation(), Sound.VILLAGER_NO, 1,10);
+                        return;
+                    }
+                    for(ItemStack stack1 : stack) {
+                        if(stack1.getType() == Material.STAINED_CLAY) {
+                            stack1.setDurability(BedWars.getInstance().getPlayerUtils().getGetTeamByPlayer(player).getColorData());
+                        }else if(stack1.getType() == Material.LEATHER_BOOTS || stack1.getType() == Material.LEATHER_CHESTPLATE ||
+                                stack1.getType() == Material.LEATHER_LEGGINGS ||stack1.getType() == Material.LEATHER_BOOTS) {
+                            ShopUtilsByPlayer shopUtilsByPlayer = new ShopUtilsByPlayer();
+                            shopUtilsByPlayer.setArmorColor(stack1, BedWars.getInstance().getPlayerUtils().getGetTeamByPlayer(player));
+                        }
+
+                        player.getInventory().addItem(stack1);
+                    }
+                    player.setLevel(player.getLevel()-preis);
+                    player.playSound(player.getLocation(), Sound.NOTE_PLING, 1,10);
+                    return;
+                }
+                player.sendMessage("§cDieses Paket ist Leer!");
+                player.playSound(player.getLocation(), Sound.VILLAGER_NO, 1,10);
             }
             if (e.isShiftClick()) {
 

@@ -80,6 +80,7 @@ public class MapVoting {
                     break;
                 }
             }
+            isOver = true;
         }catch(Exception e) {
 
         }
